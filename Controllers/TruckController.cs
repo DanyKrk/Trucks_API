@@ -9,26 +9,29 @@ namespace Trucks_API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class TruckController: ControllerBase
+    public class TruckController : ControllerBase
     {
-        private static List<Truck> trucks = new List<Truck>{
-            new Truck(),
-            new Truck{Tare = 100}
-        };
-        [HttpGet]
-        public ActionResult<List<Truck>> Get()
+        private readonly ITruckService _truckService;
+
+        public TruckController(ITruckService truckService)
         {
-            return Ok(trucks);
+            this._truckService = truckService;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<ServiceResponse<List<Truck>>>> Get()
+        {
+            return Ok(await _truckService.GetAllTrucks());
         }
         [HttpGet("{id}")]
-        public ActionResult<Truck> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<Truck>>> GetSingle(int id)
         {
-            return Ok(trucks.FirstOrDefault(c => c.DomainId == id));
+            return Ok(await _truckService.GetTruckById(id));
         }
         [HttpPost]
-        public ActionResult<List<Truck>> AddTruck(Truck newTruck){
-            trucks.Add(newTruck);
-            return Ok(trucks);
+        public async Task<ActionResult<ServiceResponse<List<Truck>>>> AddTruck(Truck newTruck)
+        {
+            return Ok(await _truckService.AddTruck(newTruck));
         }
     }
 }
