@@ -3,6 +3,7 @@ global using Trucks_API.Services;
 global using Trucks_API.Services.TruckService;
 global using Trucks_API.Dtos.Truck;
 global using AutoMapper;
+global using Microsoft.EntityFrameworkCore;
 
 
 var builder = WebApplication.CreateBuilder(args);
