@@ -43,5 +43,15 @@ namespace Trucks_API.Controllers
             }
             return Ok(response);
         }
+        [HttpDelete("{id}")]
+        public async Task<ActionResult<ServiceResponse<List<GetTruckDto>>>> DeleteTruck(int id)
+        {
+            var response = await _truckService.DeleteTruck(id);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
+        }
     }
 }

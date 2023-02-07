@@ -63,5 +63,28 @@ namespace Trucks_API.Services.TruckService
             }
             return serviceResponse;
         }
+
+        public async Task<ServiceResponse<List<GetTruckDto>>> DeleteTruck(int id)
+        {
+            var serviceResponse = new ServiceResponse<List<GetTruckDto>>();
+
+            try
+            {
+                var truck = trucks.FirstOrDefault(t => t.Id == id);
+                if (truck is null)
+                {
+                    throw new Exception($"Truck with Id '{id}' not found");
+                }
+
+                trucks.Remove(truck);
+                serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
+            return serviceResponse;
+        }
     }
 }
