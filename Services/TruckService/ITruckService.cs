@@ -12,5 +12,7 @@ namespace Trucks_API.Services
         Task<ServiceResponse<GetTruckDto>> GetTruckById(int id);
 
         Task<ServiceResponse<List<GetTruckDto>>> AddTruck(AddTruckDto newTruck);
+
+        Task<ServiceResponse<GetTruckDto>> UpdateTruck(UpdateTruckDto updatedTruck);
     }
 }

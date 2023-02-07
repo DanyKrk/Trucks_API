@@ -33,5 +33,10 @@ namespace Trucks_API.Controllers
         {
             return Ok(await _truckService.AddTruck(newTruck));
         }
+        [HttpPut]
+        public async Task<ActionResult<ServiceResponse<List<GetTruckDto>>>> UpdateTruck(UpdateTruckDto updatedTruck)
+        {
+            return Ok(await _truckService.UpdateTruck(updatedTruck));
+        }
     }
 }

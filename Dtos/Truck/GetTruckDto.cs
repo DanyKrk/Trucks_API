@@ -8,7 +8,7 @@ namespace Trucks_API.Dtos.Truck
     public class GetTruckDto
     {
 
-        public int DomainId { get; set; }
+        public int Id { get; set; }
         public int Tare { get; set; }
 
         public int LoadCapacity { get; set; }
