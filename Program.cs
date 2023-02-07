@@ -1,6 +1,9 @@
 global using Trucks_API.Models;
 global using Trucks_API.Services;
 global using Trucks_API.Services.TruckService;
+global using Trucks_API.Dtos.Truck;
+global using AutoMapper;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 builder.Services.AddScoped<ITruckService, TruckService>();
 
 var app = builder.Build();

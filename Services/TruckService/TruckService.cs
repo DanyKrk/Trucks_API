@@ -11,24 +11,30 @@ namespace Trucks_API.Services.TruckService
             new Truck(),
             new Truck{Tare = 100}
         };
-        public async Task<ServiceResponse<List<Truck>>> GetAllTrucks()
+        private readonly IMapper _mapper;
+
+        public TruckService(IMapper mapper)
         {
-            var serviceResponse = new ServiceResponse<List<Truck>>();
-            serviceResponse.Data = trucks;
+            this._mapper = mapper;
+        }
+        public async Task<ServiceResponse<List<GetTruckDto>>> GetAllTrucks()
+        {
+            var serviceResponse = new ServiceResponse<List<GetTruckDto>>();
+            serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
             return serviceResponse;
         }
-        public async Task<ServiceResponse<Truck>> GetTruckById(int id)
+        public async Task<ServiceResponse<GetTruckDto>> GetTruckById(int id)
         {
-            var serviceResponse = new ServiceResponse<Truck>();
+            var serviceResponse = new ServiceResponse<GetTruckDto>();
             var truck = trucks.FirstOrDefault(t => t.DomainId == id);
-            serviceResponse.Data = truck;
+            serviceResponse.Data = _mapper.Map<GetTruckDto>(truck);
             return serviceResponse;
         }
-        public async Task<ServiceResponse<List<Truck>>> AddTruck(Truck newTruck)
+        public async Task<ServiceResponse<List<GetTruckDto>>> AddTruck(AddTruckDto newTruck)
         {
-            var serviceResponse = new ServiceResponse<List<Truck>>();
-            trucks.Add(newTruck);
-            serviceResponse.Data = trucks;
+            var serviceResponse = new ServiceResponse<List<GetTruckDto>>();
+            trucks.Add(_mapper.Map<Truck>(newTruck));
+            serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
             return serviceResponse;
         }
     }

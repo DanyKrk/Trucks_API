@@ -19,17 +19,17 @@ namespace Trucks_API.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<ServiceResponse<List<Truck>>>> Get()
+        public async Task<ActionResult<ServiceResponse<List<GetTruckDto>>>> Get()
         {
             return Ok(await _truckService.GetAllTrucks());
         }
         [HttpGet("{id}")]
-        public async Task<ActionResult<ServiceResponse<Truck>>> GetSingle(int id)
+        public async Task<ActionResult<ServiceResponse<GetTruckDto>>> GetSingle(int id)
         {
             return Ok(await _truckService.GetTruckById(id));
         }
         [HttpPost]
-        public async Task<ActionResult<ServiceResponse<List<Truck>>>> AddTruck(Truck newTruck)
+        public async Task<ActionResult<ServiceResponse<List<GetTruckDto>>>> AddTruck(AddTruckDto newTruck)
         {
             return Ok(await _truckService.AddTruck(newTruck));
         }
