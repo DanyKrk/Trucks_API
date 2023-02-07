@@ -36,7 +36,12 @@ namespace Trucks_API.Controllers
         [HttpPut]
         public async Task<ActionResult<ServiceResponse<List<GetTruckDto>>>> UpdateTruck(UpdateTruckDto updatedTruck)
         {
-            return Ok(await _truckService.UpdateTruck(updatedTruck));
+            var response = await _truckService.UpdateTruck(updatedTruck);
+            if (response.Data is null)
+            {
+                return NotFound(response);
+            }
+            return Ok(response);
         }
     }
 }

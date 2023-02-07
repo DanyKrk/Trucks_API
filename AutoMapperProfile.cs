@@ -11,6 +11,7 @@ namespace Trucks_API
         {
             CreateMap<Truck, GetTruckDto>();
             CreateMap<AddTruckDto, Truck>();
+            CreateMap<UpdateTruckDto, Truck>();
         }
     }
 }

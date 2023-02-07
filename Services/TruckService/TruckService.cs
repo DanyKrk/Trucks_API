@@ -43,16 +43,24 @@ namespace Trucks_API.Services.TruckService
         public async Task<ServiceResponse<GetTruckDto>> UpdateTruck(UpdateTruckDto updatedTruck)
         {
             var serviceResponse = new ServiceResponse<GetTruckDto>();
-            var truck = trucks.FirstOrDefault(t => t.Id == updatedTruck.Id);
 
-            truck.Tare = updatedTruck.Tare;
-            truck.LoadCapacity = updatedTruck.LoadCapacity;
-            truck.AutonomyWhenFullyCharged = updatedTruck.AutonomyWhenFullyCharged;
-            truck.FastChargingTime = updatedTruck.FastChargingTime;
-            truck.IsActive = updatedTruck.IsActive;
-            truck.MaximumBatteryCharge = updatedTruck.MaximumBatteryCharge;
+            try
+            {
+                var truck = trucks.FirstOrDefault(t => t.Id == updatedTruck.Id);
+                if (truck is null)
+                {
+                    throw new Exception($"Truck with Id '{updatedTruck.Id}' not found");
+                }
 
-            serviceResponse.Data = _mapper.Map<GetTruckDto>(truck);
+                _mapper.Map(updatedTruck, truck);
+
+                serviceResponse.Data = _mapper.Map<GetTruckDto>(truck);
+            }
+            catch (Exception ex)
+            {
+                serviceResponse.Success = false;
+                serviceResponse.Message = ex.Message;
+            }
             return serviceResponse;
         }
     }
