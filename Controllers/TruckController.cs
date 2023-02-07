@@ -15,15 +15,20 @@ namespace Trucks_API.Controllers
             new Truck(),
             new Truck{Tare = 100}
         };
-        [HttpGet("GetAll")]
+        [HttpGet]
         public ActionResult<List<Truck>> Get()
         {
             return Ok(trucks);
         }
-        [HttpGet]
-        public ActionResult<Truck> GetSinglel()
+        [HttpGet("{id}")]
+        public ActionResult<Truck> GetSingle(int id)
         {
-            return Ok(trucks[0]);
+            return Ok(trucks.FirstOrDefault(c => c.DomainId == id));
+        }
+        [HttpPost]
+        public ActionResult<List<Truck>> AddTruck(Truck newTruck){
+            trucks.Add(newTruck);
+            return Ok(trucks);
         }
     }
 }
