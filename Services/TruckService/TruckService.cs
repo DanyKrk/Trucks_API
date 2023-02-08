@@ -7,36 +7,36 @@ namespace Trucks_API.Services.TruckService
 {
     public class TruckService : ITruckService
     {
-        private static List<Truck> trucks = new List<Truck>{
-            new Truck(),
-            new Truck{Id=1, Tare = 100}
-        };
         private readonly IMapper _mapper;
+        private readonly DataContext _context;
 
-        public TruckService(IMapper mapper)
+        public TruckService(IMapper mapper, DataContext context)
         {
-            this._mapper = mapper;
+            _context = context;
+            _mapper = mapper;
         }
         public async Task<ServiceResponse<List<GetTruckDto>>> GetAllTrucks()
         {
             var serviceResponse = new ServiceResponse<List<GetTruckDto>>();
-            serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
+            var dbTrucks = await _context.Trucks.ToListAsync();
+            serviceResponse.Data = dbTrucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
             return serviceResponse;
         }
         public async Task<ServiceResponse<GetTruckDto>> GetTruckById(int id)
         {
             var serviceResponse = new ServiceResponse<GetTruckDto>();
-            var truck = trucks.FirstOrDefault(t => t.Id == id);
-            serviceResponse.Data = _mapper.Map<GetTruckDto>(truck);
+            var dbTruck = await _context.Trucks.FirstOrDefaultAsync(t => t.Id == id);
+            serviceResponse.Data = _mapper.Map<GetTruckDto>(dbTruck);
             return serviceResponse;
         }
         public async Task<ServiceResponse<List<GetTruckDto>>> AddTruck(AddTruckDto newTruck)
         {
             var serviceResponse = new ServiceResponse<List<GetTruckDto>>();
             var truck = _mapper.Map<Truck>(newTruck);
-            truck.Id = trucks.Max(t => t.Id) + 1;
-            trucks.Add(truck);
-            serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
+            // truck.Id = trucks.Max(t => t.Id) + 1;
+            _context.Trucks.Add(truck);
+            await _context.SaveChangesAsync();
+            serviceResponse.Data = _context.Trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
             return serviceResponse;
         }
 
@@ -46,15 +46,15 @@ namespace Trucks_API.Services.TruckService
 
             try
             {
-                var truck = trucks.FirstOrDefault(t => t.Id == updatedTruck.Id);
-                if (truck is null)
+                var dbTruck = await _context.Trucks.FirstOrDefaultAsync(t => t.Id == updatedTruck.Id);
+                if (dbTruck is null)
                 {
                     throw new Exception($"Truck with Id '{updatedTruck.Id}' not found");
                 }
 
-                _mapper.Map(updatedTruck, truck);
-
-                serviceResponse.Data = _mapper.Map<GetTruckDto>(truck);
+                _mapper.Map(updatedTruck, dbTruck);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _mapper.Map<GetTruckDto>(dbTruck);
             }
             catch (Exception ex)
             {
@@ -70,14 +70,15 @@ namespace Trucks_API.Services.TruckService
 
             try
             {
-                var truck = trucks.FirstOrDefault(t => t.Id == id);
-                if (truck is null)
+                var dbTruck = await _context.Trucks.FirstOrDefaultAsync(t => t.Id == id);
+                if (dbTruck is null)
                 {
                     throw new Exception($"Truck with Id '{id}' not found");
                 }
 
-                trucks.Remove(truck);
-                serviceResponse.Data = trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
+                _context.Trucks.Remove(dbTruck);
+                await _context.SaveChangesAsync();
+                serviceResponse.Data = _context.Trucks.Select(t => _mapper.Map<GetTruckDto>(t)).ToList();
             }
             catch (Exception ex)
             {

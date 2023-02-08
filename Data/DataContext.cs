@@ -12,6 +12,6 @@ namespace Trucks_API.Data
 
         }
 
-        DbSet<Truck> Trucks => Set<Truck>();
+        public DbSet<Truck> Trucks => Set<Truck>();
     }
 }
