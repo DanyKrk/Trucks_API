@@ -19,6 +19,6 @@ namespace Trucks_API.Dtos.Truck
 
         public int FastChargingTime { get; set; }
 
-        public int IsActive { get; set; }
+        public bool IsActive { get; set; }
     }
 }

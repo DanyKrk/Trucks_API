@@ -18,7 +18,7 @@ namespace Trucks_API.Models
 
         public int FastChargingTime { get; set; }
 
-        public int IsActive { get; set; }
+        public bool IsActive { get; set; }
 
     }
 }
